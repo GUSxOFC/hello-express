@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_URL = 'http://localhost:3000/api';
     const statusIndicator = document.getElementById('statusIndicator');
     const messageDiv = document.getElementById('message');
 
-    // --- Fungsi Umum ---
     const showMessage = (text, type) => {
         messageDiv.textContent = text;
         messageDiv.className = `message ${type}`;
@@ -13,10 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 5000);
     };
 
-    // --- Cek Status Backend ---
     const checkBackendStatus = async () => {
         try {
-            const response = await fetch(`${API_URL}/status`);
+            const response = await fetch('/api/bot', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'status' }),
+            });
             const data = await response.json();
             if (data.status === 'online') {
                 statusIndicator.classList.add('online');
@@ -29,11 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Polling status setiap 3 detik
     setInterval(checkBackendStatus, 3000);
-    checkBackendStatus(); // Cek saat pertama kali load
+    checkBackendStatus();
 
-    // --- Logika Halaman Login (index.html) ---
     const loginForm = document.getElementById('loginForm');
     const codeForm = document.getElementById('codeForm');
     const sendCodeBtn = document.getElementById('sendCodeBtn');
@@ -45,12 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const phoneNumber = document.getElementById('phoneNumber').value;
             sendCodeBtn.disabled = true;
             sendCodeBtn.textContent = 'Mengirim...';
-
             try {
-                const response = await fetch(`${API_URL}/send-code`, {
+                const response = await fetch('/api/bot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phoneNumber }),
+                    body: JSON.stringify({ action: 'send-code', phoneNumber }),
                 });
                 const data = await response.json();
                 if (response.ok) {
@@ -70,14 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
         codeForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const code = document.getElementById('code').value;
+            const phoneNumber = document.getElementById('phoneNumber').value; // Ambil lagi nomornya
             signInBtn.disabled = true;
             signInBtn.textContent = 'Memproses...';
-
             try {
-                const response = await fetch(`${API_URL}/sign-in`, {
+                const response = await fetch('/api/bot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ code }),
+                    body: JSON.stringify({ action: 'sign-in', code, phoneNumber }),
                 });
                 const data = await response.json();
                 if (response.ok) {
@@ -97,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Logika Halaman Broadcast (broadcast.html) ---
     const broadcastForm = document.getElementById('broadcastForm');
     const logoutBtn = document.getElementById('logoutBtn');
     const broadcastBtn = document.getElementById('broadcastBtn');
@@ -107,16 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             broadcastBtn.disabled = true;
             broadcastBtn.textContent = 'Mengirim...';
-
             const message = document.getElementById('message').value;
             const buttonText = document.getElementById('buttonText').value;
             const buttonLink = document.getElementById('buttonLink').value;
-
             try {
-                const response = await fetch(`${API_URL}/broadcast`, {
+                const response = await fetch('/api/bot', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message, buttonText, buttonLink }),
+                    body: JSON.stringify({ action: 'broadcast', message, buttonText, buttonLink }),
                 });
                 const data = await response.json();
                 if (response.ok) {
@@ -136,7 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (logoutBtn) {
             logoutBtn.addEventListener('click', async () => {
                 try {
-                    await fetch(`${API_URL}/logout`, { method: 'POST' });
+                    await fetch('/api/bot', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'logout' }),
+                    });
                     window.location.href = 'index.html';
                 } catch (error) {
                     showMessage('Gagal logout.', 'error');
