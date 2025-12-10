@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Broadcast Pesan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="status-indicator" id="statusIndicator" title="Status Backend"></div>
+    <div class="container">
+        <h1>Broadcast Pesan</h1>
+        <form id="broadcastForm">
+            <div class="input-group">
+                <label for="message">Pesan Anda</label>
+                <textarea id="message" rows="5" placeholder="Halo semuanya..." required></textarea>
+            </div>
+            <div class="input-group">
+                <label for="buttonText">Teks Tombol (Opsional)</label>
+                <input type="text" id="buttonText" placeholder="Kunjungi Website">
+            </div>
+            <div class="input-group">
+                <label for="buttonLink">Link Tombol (Opsional)</label>
+                <input type="url" id="buttonLink" placeholder="https://example.com">
+            </div>
+            <button type="submit" id="broadcastBtn">Kirim Broadcast</button>
+        </form>
+        <button id="logoutBtn" class="logout-btn">Logout</button>
+        <div id="message" class="message"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
