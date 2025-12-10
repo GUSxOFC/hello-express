@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Telegram Userbot</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="status-indicator" id="statusIndicator" title="Status Backend"></div>
+    <div class="container">
+        <h1>Login Telegram Userbot</h1>
+        <form id="loginForm">
+            <div class="input-group">
+                <label for="phoneNumber">Masukkan Nomor Telegram Anda</label>
+                <input type="tel" id="phoneNumber" placeholder="+628123456789" required>
+            </div>
+            <button type="submit" id="sendCodeBtn">Kirim Kode</button>
+        </form>
+
+        <form id="codeForm" style="display: none;">
+            <div class="input-group">
+                <label for="code">Masukkan Kode yang Dikirim</label>
+                <input type="text" id="code" placeholder="12345" required>
+            </div>
+            <button type="submit" id="signInBtn">Masuk</button>
+        </form>
+        <div id="message" class="message"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

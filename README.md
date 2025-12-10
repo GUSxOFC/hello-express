@@ -1,1 +1,0 @@
-# Laso-panjang
